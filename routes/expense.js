@@ -1,15 +1,14 @@
 const express = require('express');    
-
-const path = require('path');
+const Authorization = require('../middleware/authentication');
 
 const contactController = require('../controllers/admin')
 
 const router = express.Router();
 
-router.post('/add-expense',contactController.postAddExpense)
+router.post('/add-expense', Authorization.authenticate, contactController.postAddExpense)
 
-router.get('/get-expense',contactController.getAddExpense)
+router.get('/get-expense', Authorization.authenticate, contactController.getAddExpense)
 
-router.delete('/delete-expense/:id',contactController.postDeleteExpense)
+router.delete('/delete-expense/:id', Authorization.authenticate, contactController.postDeleteExpense)
 
 module.exports=router;

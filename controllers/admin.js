@@ -1,46 +1,43 @@
-const Expense = require('../models/expenses')   
- 
-exports.getAddExpense =( async (req,res,next)=>{
+const Expense = require("../models/expenses");
 
-    try{
-        const data = await  Expense.findAll()
-        res.json(data);
-    }
-    catch(err){
-        console.log(err)}
-});
+exports.getAddExpense = (req, res, next) => {
+  try {
+     Expense.find({ userId: req.user._id }).then((expenses) => {
+      res.json(expenses);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-exports.postAddExpense=( async (req,res,next) => {
-    try{
-    const expenseAmount=req.body.expenseAmount;
-    const category=req.body.category;
-    const description=req.body.description;
+exports.postAddExpense = async (req, res, next) => {
+  try {
+    const expenseAmount = req.body.expenseAmount;
+    const category = req.body.category;
+    const description = req.body.description;
 
-    const data = await Expense.create({
-        expenseAmount : expenseAmount,
-        category : category,
-        description : description
-    })
-     res.json(data);
-     }
+    const expense = new Expense({
+      expenseAmount: expenseAmount,
+      category: category,
+      description: description,
+      userId: req.user,
+    });
 
+    expense.save().then(() => {
+      res.json(expense);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-    catch(err)   {
-        console.log(err)
-    };
-
-    //res.redirect('/');
-})
-
-exports.postDeleteExpense=( async (req, res,  next) => {
-
-
-     try {
-           const expenseId = req.params.id;
-   const data = await Expense.destroy({ where: {id:expenseId}});
-      res.sendStatus(200); 
-    } 
-     catch(err){
-        console.log(err);
-     }
-});
+exports.postDeleteExpense = (req, res, next) => {
+  try {
+    const expenseId = req.params.id;
+ Expense.findByIdAndDelete(expenseId).then(() => {
+     res.sendStatus(200);
+ })
+  } catch (err) {
+    console.log(err);
+  }
+};

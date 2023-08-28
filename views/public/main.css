@@ -67,4 +67,16 @@
     margin: 5px;
     max-width: 4pc;
   }
-  
+
+#logout-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+
+header {
+  position: relative;
+  padding-bottom: 30px;
+}
+
